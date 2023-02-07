@@ -10,7 +10,8 @@ class UriCreator {
   ///Webview link generation method.
   Uri createUri(String clientId, mobileRedirectUri) {
     if (clientId.isEmpty || mobileRedirectUri.isEmpty) {
-      final message = "clientId: $clientId or mobileRedirectUri: $mobileRedirectUri is empty";
+      final message =
+          "clientId: $clientId or mobileRedirectUri: $mobileRedirectUri is empty";
       throw Exception(message);
     }
 

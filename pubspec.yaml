@@ -1,11 +1,11 @@
 name: tinkoff_id_web
 description: Tinkoff Id WebToApp Flutter Realization
-version: 1.0.0
+version: 1.0.1
 homepage: https://kodefabrique.com
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.16.2 <3.0.0"
+  flutter: ">=2.10.5"
 
 dependencies:
   flutter:

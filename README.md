@@ -32,7 +32,20 @@ class TinkoffIdWebViewScreen extends StatelessWidget {
             print(result.tokenPayload.refreshToken);
           } else {
             print(result.message);
-            print(result.failureValue);
+            switch (result.failureValue) {
+              case TinkoffIdFailure.cancelledByUser:
+              // TODO: Handle this case.
+                break;
+              case TinkoffIdFailure.webResourceError:
+              // TODO: Handle this case.
+                break;
+              case TinkoffIdFailure.noCodeInRedirectUri:
+              // TODO: Handle this case.
+                break;
+              case TinkoffIdFailure.apiCallError:
+              // TODO: Handle this case.
+                break;
+            }
           }
         },
         
