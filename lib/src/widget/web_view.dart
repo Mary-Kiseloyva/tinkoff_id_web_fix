@@ -159,7 +159,7 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
       }
     } else {
       _onFinished(TinkoffIdResult.failure(
-        "There was no validation code in the redirected link.",
+        "Отсутствует код проверки",
         TinkoffIdFailure.noCodeInRedirectUri,
       ));
     }
