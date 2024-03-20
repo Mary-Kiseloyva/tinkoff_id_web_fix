@@ -20,8 +20,8 @@ abstract class TinkoffIdWebApi {
 class TinkoffIdWebApiImpl implements TinkoffIdWebApi {
   final Dio _dio = Dio(BaseOptions(
     baseUrl: "https://id.tinkoff.ru/",
-    connectTimeout: 8000,
-    receiveTimeout: 8000,
+    connectTimeout: const Duration(milliseconds: 8000),
+    receiveTimeout: const Duration(milliseconds: 8000),
   ));
 
   TinkoffIdWebApiImpl() {
@@ -53,7 +53,7 @@ class TinkoffIdWebApiImpl implements TinkoffIdWebApi {
       options: Options(
         responseType: ResponseType.json,
         headers: {
-          "Authorization": "Basic " + base64Encode(utf8.encode(clientId)),
+          "Authorization": "Basic ${base64Encode(utf8.encode(clientId))}",
         },
         contentType: "application/x-www-form-urlencoded",
       ),

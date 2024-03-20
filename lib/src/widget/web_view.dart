@@ -28,13 +28,13 @@ class TinkoffIdWebView extends StatefulWidget {
   final Function(TinkoffIdResult result) onWebViewFinished;
 
   const TinkoffIdWebView({
-    Key? key,
+    super.key,
     required this.onWebViewFinished,
     required this.clientId,
     required this.mobileRedirectUri,
     this.clearCookies = false,
     this.showProgressIndicator = false,
-  }) : super(key: key);
+  });
 
   @override
   State<TinkoffIdWebView> createState() => _TinkoffIdWebViewState();
@@ -51,7 +51,8 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
   @override
   void initState() {
     _uriCreator = UriCreator();
-    final uri = _uriCreator.createUri(widget.clientId, widget.mobileRedirectUri);
+    final uri =
+        _uriCreator.createUri(widget.clientId, widget.mobileRedirectUri);
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
@@ -71,7 +72,8 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
                 request.url.contains("${tinkoffUrl}api")) {
               return NavigationDecision.navigate;
             } else if (request.url.contains(tinkoffUrl)) {
-              _onFinished(TinkoffIdResult.failure("Cancelled by user.", TinkoffIdFailure.cancelledByUser));
+              _onFinished(TinkoffIdResult.failure(
+                  "Cancelled by user.", TinkoffIdFailure.cancelledByUser));
               return NavigationDecision.prevent;
             }
             if (request.url.contains(widget.mobileRedirectUri)) {
@@ -90,10 +92,13 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
           },
           onWebResourceError: (WebResourceError error) async {
             ///ios fix
-            if ((await _webViewController.currentUrl())?.contains("https://id.tinkoff.ru/auth/step?cid") ?? true) {
+            if ((await _webViewController.currentUrl())
+                    ?.contains("https://id.tinkoff.ru/auth/step?cid") ??
+                true) {
               return;
             }
-            _onFinished(TinkoffIdResult.failure(error.description, TinkoffIdFailure.webResourceError));
+            _onFinished(TinkoffIdResult.failure(
+                error.description, TinkoffIdFailure.webResourceError));
           },
         ),
       );
@@ -110,11 +115,10 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        _onFinished(TinkoffIdResult.failure("Cancelled by user.", TinkoffIdFailure.cancelledByUser));
-        return Future(() => false);
-      },
+    return PopScope(
+      onPopInvoked: (_) => _onFinished(TinkoffIdResult.failure(
+          "Cancelled by user.", TinkoffIdFailure.cancelledByUser)),
+      canPop: false,
       child: Column(
         children: [
           Expanded(
@@ -153,7 +157,8 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
         );
         _onFinished(TinkoffIdResult.success(tokenPayload));
       } catch (e) {
-        _onFinished(TinkoffIdResult.failure(e.toString(), TinkoffIdFailure.apiCallError));
+        _onFinished(TinkoffIdResult.failure(
+            e.toString(), TinkoffIdFailure.apiCallError));
       }
     } else {
       _onFinished(TinkoffIdResult.failure(
