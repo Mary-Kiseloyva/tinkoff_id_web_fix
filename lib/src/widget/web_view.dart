@@ -52,7 +52,7 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
   void initState() {
     _uriCreator = UriCreator();
     final uri =
-        _uriCreator.createUri(widget.clientId, widget.mobileRedirectUri);
+    _uriCreator.createUri(widget.clientId, widget.mobileRedirectUri);
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
@@ -93,7 +93,7 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
           onWebResourceError: (WebResourceError error) async {
             ///ios fix
             if ((await _webViewController.currentUrl())
-                    ?.contains("https://id.tinkoff.ru/auth/step?cid") ??
+                ?.contains("https://id.tinkoff.ru/auth/step?cid") ??
                 true) {
               return;
             }
@@ -107,7 +107,7 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
     }
     Future.delayed(
       const Duration(milliseconds: 200),
-      () => _webViewController.loadRequest(uri),
+          () => _webViewController.loadRequest(uri),
     );
 
     super.initState();
@@ -116,8 +116,15 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (_) => _onFinished(TinkoffIdResult.failure(
-          "Cancelled by user.", TinkoffIdFailure.cancelledByUser)),
+      onPopInvoked: (didPop) {
+        if(didPop){
+          return;
+        }
+        _onFinished(TinkoffIdResult.failure(
+            "Cancelled by user.", TinkoffIdFailure.cancelledByUser));
+
+        Navigator.of(context).pop();
+      },
       canPop: false,
       child: Column(
         children: [
@@ -145,7 +152,9 @@ class _TinkoffIdWebViewState extends State<TinkoffIdWebView> {
   }
 
   _processSuccessUrl(String url) async {
-    final queryParameters = Uri.parse(url).queryParameters;
+    final queryParameters = Uri
+        .parse(url)
+        .queryParameters;
     final code = queryParameters["code"];
     if (code?.isNotEmpty ?? false) {
       try {
